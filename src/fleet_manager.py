@@ -1,29 +1,23 @@
 from typing import Any
 
 from alien import Alien
+from fleet_formation import FleetFormation, GridFleetFormation
 
 
 class FleetManager:
     """Cria e atualiza a frota de alienígenas."""
 
-    def create(self, game: Any) -> None:
-        alien = Alien(game.screen, game.settings)
-        alien_width = alien.rect.width
-        alien_height = alien.rect.height
-        available_space_x = game.settings.screen_width - (2 * alien_width)
-        number_aliens_x = available_space_x // (2 * alien_width)
-        ship_height = game.ship.rect.height
-        available_space_y = game.settings.screen_height - (3 * alien_height) - ship_height
-        number_rows = available_space_y // (2 * alien_height)
+    def __init__(self, formation: FleetFormation | None = None) -> None:
+        self.formation = formation or GridFleetFormation()
 
-        for row_number in range(number_rows):
-            for alien_number in range(number_aliens_x):
-                fleet_alien = Alien(game.screen, game.settings)
-                fleet_alien.x = alien_width + 2 * alien_width * alien_number
-                fleet_alien.rect.x = fleet_alien.x
-                fleet_alien.y = alien_height + 2 * alien_height * row_number
-                fleet_alien.rect.y = fleet_alien.y
-                game.aliens.add(fleet_alien)
+    def create(self, game: Any) -> None:
+        for x_position, y_position in self.formation.positions(game):
+            fleet_alien = Alien(game.screen, game.settings)
+            fleet_alien.x = x_position
+            fleet_alien.rect.x = x_position
+            fleet_alien.y = y_position
+            fleet_alien.rect.y = y_position
+            game.aliens.add(fleet_alien)
 
     def update(self, game: Any) -> None:
         game.aliens.update()
