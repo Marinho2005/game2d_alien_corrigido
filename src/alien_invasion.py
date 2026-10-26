@@ -5,6 +5,7 @@ import pygame
 from bullet import Bullet
 from collision_manager import CollisionManager
 from event_handler import EventHandler
+from fleet_formation import GridFleetFormation
 from fleet_manager import FleetManager
 from renderer import Renderer
 from settings import Settings
@@ -26,7 +27,7 @@ class AlienInvasion:
         self.bullets = pygame.sprite.Group()
         self.aliens = pygame.sprite.Group()
         self.event_handler = EventHandler()
-        self.fleet_manager = FleetManager()
+        self.fleet_manager = FleetManager(GridFleetFormation())
         self.collision_manager = CollisionManager()
         self.renderer = Renderer()
 
